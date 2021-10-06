@@ -40,6 +40,7 @@ var questionsDiv = document.querySelector(".questionsDiv");
 var ul = document.createElement("ul");
 var hI = 0;
 var secondsLeft = 60;
+var lI = document.querySelector(".lI");
 
 begin.addEventListener("click", function () {
         if (hI === 0) {
@@ -66,7 +67,6 @@ function appear(questionPostition) {
     }
 
     userChoices.forEach(function(newItem) {
-        var lI = document.createElement("li")
         lI.textContent = newItem;
         questionsDiv.appendChild(ul);
         ul.appendChild(lI);
@@ -88,7 +88,7 @@ function compare(event) {
         }
     
     questionPostition++;
-    if (questionPostition >= question.length) {
+    if (questionPostition >= questions.length) {
         allDone();
         spawnDiv.textContent = "The End!" + " " + "Your score is " + score + "/" + question.length;
     } else {
