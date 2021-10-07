@@ -40,7 +40,7 @@ var questionsDiv = document.querySelector(".questionsDiv");
 var ul = document.createElement("ul");
 var hI = 0;
 var secondsLeft = 60;
-var lI = document.querySelector(".lI");
+var holdInterval = 0;
 
 begin.addEventListener("click", function () {
         if (hI === 0) {
@@ -67,10 +67,12 @@ function appear(questionPostition) {
     }
 
     userChoices.forEach(function(newItem) {
-        lI.textContent = newItem;
+        var li = document.createElement("li");
+        li.textContent = newItem;
         questionsDiv.appendChild(ul);
-        ul.appendChild(lI);
-        lI.addEventListener("click", (compare));
+        ul.appendChild(li);
+        li.style.cssText = "list-style: none; cursor: pointer";
+        li.addEventListener("click", (compare));
     })
 }
 
@@ -79,6 +81,7 @@ function compare(event) {
 
     if (element.matches("li")) {
         var spawnDiv = document.createElement("div");
+        spawnDiv.setAttribute("id", "spawnDiv");
         if (element.textContent == questions[questionPostition].answer) {
             score++;
             spawnDiv.textContent = "Correct!";
@@ -90,16 +93,21 @@ function compare(event) {
     questionPostition++;
     if (questionPostition >= questions.length) {
         allDone();
-        spawnDiv.textContent = "The End!" + " " + "Your score is " + score + "/" + question.length;
+        spawnDiv.textContent = "The End!" + " " + "Your score is " + score + "/" + questions.length + ". Your time was " + secondsLeft + " seconds.";
     } else {
         appear(questionPostition);
     }
     questionsDiv.appendChild(spawnDiv);
 }
 
+function stopTimer() {
+    clearInterval(countdown);
+}
+
 function allDone() {
     questionsDiv.innerHTML = "";
-    countdown.innerHTML = "";
+    stopTimer;
+    //countdown.innerHTML = "";
 
     var spawnh1 = document.createElement("h1");
     spawnh1.setAttribute("id", "spawnh1");
@@ -112,7 +120,7 @@ function allDone() {
 
     questionsDiv.appendChild(spawnP);
 
-    var setInitials = document.createElement("initials");
+    var setInitials = document.createElement("label");
     setInitials.setAttribute("id", "setInitials");
     setInitials.textContent = "Please enter your initials: ";
 
@@ -122,20 +130,23 @@ function allDone() {
     spawnInput.textContent = "";
 
     var spawnSubmit = document.createElement("button");
+    spawnSubmit.style.cssText = "cursor: pointer";
     spawnSubmit.setAttribute("type", "submit");
-    spawnSubmit.setAttribute("id", "Submit");
+    spawnSubmit.setAttribute("id", "submit");
     spawnSubmit.textContent = "Submit";
 
     questionsDiv.appendChild(spawnSubmit);
+    questionsDiv.appendChild(setInitials);
+    questionsDiv.appendChild(spawnInput);
 
     spawnSubmit.addEventListener("click", function () {
         var initials = spawnInput.value;
         if (initials === null) {
-            console.log("You didn't type anything. Try again");
+            alert("You didn't type anything. Try again");
         } else {
             var finalScore = {
                 initials: initials,
-                score: timeRemaining
+                score: timeRemaining,
             }
             console.log(finalScore);
             var allScores = localStorage.getItem("allScores");
@@ -147,7 +158,7 @@ function allDone() {
             allScores.push(finalScore)
             var newScore = JSON.stringify(allScores);
             localStorage.setItem("allScores", newScore);
-            window.location.replace("");
+            window.location.replace("./highscorepageindex.html");
         }
     });
 
