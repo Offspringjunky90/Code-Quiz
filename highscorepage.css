@@ -16,6 +16,10 @@ h1 {
     text-decoration: underline;
 }
 
+p {
+    font-size: 20px;
+}
+
 button {
     border-radius: 4px;
     box-shadow: 5px, 5px, 5px, 5px;

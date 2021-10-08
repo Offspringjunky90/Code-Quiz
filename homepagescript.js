@@ -51,6 +51,7 @@ begin.addEventListener("click", function () {
             if (secondsLeft <= 0) {
                 clearInterval(hI);
                 countdown.textContent = "Sorry, but your time is up! Let's see how you did!";
+                allDone();
             }
         }, 1000);
     }
@@ -101,13 +102,12 @@ function compare(event) {
 }
 
 function stopTimer() {
-    clearInterval(countdown);
+    clearInterval(hI);
 }
 
 function allDone() {
-    questionsDiv.innerHTML = "";
-    stopTimer;
-    //countdown.innerHTML = "";
+    questionsDiv.innerHTML = "",
+    stopTimer();
 
     var spawnh1 = document.createElement("h1");
     spawnh1.setAttribute("id", "spawnh1");
@@ -141,24 +141,16 @@ function allDone() {
 
     spawnSubmit.addEventListener("click", function () {
         var initials = spawnInput.value;
+        var timeRemaining = secondsLeft;
         if (initials === null) {
-            alert("You didn't type anything. Try again");
+            alert("");
         } else {
             var finalScore = {
                 initials: initials,
                 score: timeRemaining,
             }
-            console.log(finalScore);
-            var allScores = localStorage.getItem("allScores");
-            if (allScores === null) {
-                allScores = [];
-            } else {
-                allScores = JSON.parse(allScores);
-            }
-            allScores.push(finalScore)
-            var newScore = JSON.stringify(allScores);
-            localStorage.setItem("allScores", newScore);
-            window.location.replace("./highscorepageindex.html");
+            localStorage.setItem("finalScore", JSON.stringify(finalScore));
+            location.replace("./highscorepageindex.html");
         }
     });
 
