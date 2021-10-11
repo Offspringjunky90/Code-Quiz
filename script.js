@@ -40,6 +40,7 @@ var questionsDiv = document.querySelector(".questionsDiv");
 var ul = document.createElement("ul");
 var hI = 0;
 var secondsLeft = 60;
+var holdInterval = 0;
 
 begin.addEventListener("click", function () {
         if (hI === 0) {
@@ -50,6 +51,7 @@ begin.addEventListener("click", function () {
             if (secondsLeft <= 0) {
                 clearInterval(hI);
                 countdown.textContent = "Sorry, but your time is up! Let's see how you did!";
+                allDone();
             }
         }, 1000);
     }
@@ -66,11 +68,12 @@ function appear(questionPostition) {
     }
 
     userChoices.forEach(function(newItem) {
-        var lI = document.createElement("li")
-        lI.textContent = newItem;
+        var li = document.createElement("li");
+        li.textContent = newItem;
         questionsDiv.appendChild(ul);
-        ul.appendChild(lI);
-        lI.addEventListener("click", (compare));
+        ul.appendChild(li);
+        li.style.cssText = "list-style: none; cursor: pointer";
+        li.addEventListener("click", (compare));
     })
 }
 
@@ -79,6 +82,7 @@ function compare(event) {
 
     if (element.matches("li")) {
         var spawnDiv = document.createElement("div");
+        spawnDiv.setAttribute("id", "spawnDiv");
         if (element.textContent == questions[questionPostition].answer) {
             score++;
             spawnDiv.textContent = "Correct!";
@@ -88,18 +92,22 @@ function compare(event) {
         }
     
     questionPostition++;
-    if (questionPostition >= question.length) {
+    if (questionPostition >= questions.length) {
         allDone();
-        spawnDiv.textContent = "The End!" + " " + "Your score is " + score + "/" + question.length;
+        spawnDiv.textContent = "The End!" + " " + "Your score is " + score + "/" + questions.length + ". Your time was " + secondsLeft + " seconds.";
     } else {
         appear(questionPostition);
     }
     questionsDiv.appendChild(spawnDiv);
 }
 
+function stopTimer() {
+    clearInterval(hI);
+}
+
 function allDone() {
-    questionsDiv.innerHTML = "";
-    countdown.innerHTML = "";
+    questionsDiv.innerHTML = "",
+    stopTimer();
 
     var spawnh1 = document.createElement("h1");
     spawnh1.setAttribute("id", "spawnh1");
@@ -112,7 +120,7 @@ function allDone() {
 
     questionsDiv.appendChild(spawnP);
 
-    var setInitials = document.createElement("initials");
+    var setInitials = document.createElement("label");
     setInitials.setAttribute("id", "setInitials");
     setInitials.textContent = "Please enter your initials: ";
 
@@ -122,32 +130,27 @@ function allDone() {
     spawnInput.textContent = "";
 
     var spawnSubmit = document.createElement("button");
+    spawnSubmit.style.cssText = "cursor: pointer";
     spawnSubmit.setAttribute("type", "submit");
-    spawnSubmit.setAttribute("id", "Submit");
+    spawnSubmit.setAttribute("id", "submit");
     spawnSubmit.textContent = "Submit";
 
     questionsDiv.appendChild(spawnSubmit);
+    questionsDiv.appendChild(setInitials);
+    questionsDiv.appendChild(spawnInput);
 
     spawnSubmit.addEventListener("click", function () {
         var initials = spawnInput.value;
+        var timeRemaining = secondsLeft;
         if (initials === null) {
-            console.log("You didn't type anything. Try again");
+            alert("");
         } else {
             var finalScore = {
                 initials: initials,
-                score: timeRemaining
+                score: timeRemaining,
             }
-            console.log(finalScore);
-            var allScores = localStorage.getItem("allScores");
-            if (allScores === null) {
-                allScores = [];
-            } else {
-                allScores = JSON.parse(allScores);
-            }
-            allScores.push(finalScore)
-            var newScore = JSON.stringify(allScores);
-            localStorage.setItem("allScores", newScore);
-            window.location.replace("");
+            localStorage.setItem("finalScore", JSON.stringify(finalScore));
+            location.replace("./highscorepage.html");
         }
     });
 

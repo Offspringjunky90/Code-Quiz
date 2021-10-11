@@ -150,7 +150,7 @@ function allDone() {
                 score: timeRemaining,
             }
             localStorage.setItem("finalScore", JSON.stringify(finalScore));
-            location.replace("./highscorepage.html");
+            location.replace("./Assets/highscorepage.html");
         }
     });
 

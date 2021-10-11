@@ -8,7 +8,6 @@
 a {
     float: left;
     font-size: 12px;
-    font-family: 
 }
 
 #countdown {
@@ -31,9 +30,18 @@ p {
     font-size: 12px;
 }
 
-/*ul {*/
-
-/*} */
+ul {
+    list-style: none;
+  }
+  
+li {
+      border-radius: 4px;
+      box-shadow: 5px, 5px, 5px, 5px;
+  }
+  
+li:hover { 
+      background-color: gray;
+  }
 
 button {
     border-radius: 4px;
